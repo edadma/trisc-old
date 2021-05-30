@@ -1,0 +1,121 @@
+### S-type
+
+The *S-type* format for making system calls, or otherwise interacting with the system.
+
+     31   28                      16                               0
+    +-------+-----------------------+-------------------------------+
+    | 0000  |       vector          |           immediate           |
+    +-------+-------------------------------------------------------+
+
+### R-type (register)
+
+     31   28      24      20      16      12                       0
+    +-------+-------+-------+-------+-------+-----------------------+
+    | 01 op |  rD   |  rA   | func  |  rB   |       immediate       |
+    +-------+-------+-------+-------+-------+-----------------------+
+
+op = 00: arithmetic
+
+op = 01: logical
+
+### T-type (transfer)
+
+     31   28      24      20      16  14                           0
+    +-------+-------+-------+-------+---+---------------------------+
+    | 1000  |  rD   |  rA   | func  | t |         immediate         |
+    +-------+-------+-------+-------+---+---------------------------+
+
+t = 0: 8-bit
+
+t = 1: 16-bit
+
+t = 2: 32-bit
+
+### I-type (immediate)
+
+     31   28      24      20      16                               0
+    +-------+-------+-------+-------+-------------------------------+
+    | 11 op |  rD   |  rA   | func  |           immediate           |
+    +-------+-------+-------+-------+-------------------------------+
+
+op = 00: load upper
+
+Instructions
+------------
+
+### Arithmetic Logic
+
+#### add
+
+`add` *rA* *rB* *imm12* *rD*
+
+01 00 *rD* *rA* 0000 *rB* *imm12*
+
+> *rD* ← *rA* + *rB*
+>
+> *C* ← carry out
+
+#### add with carry
+
+`addc` *rA* *rB* *rD*
+
+01 00 *rD* *rA* 0001 *rB*
+
+> *rD* ← *rA* + *rB* + *C*
+>
+> *C* ← carry out
+
+### Load/Store
+
+#### load upper immediate
+
+`imm` *imm16*
+
+11 00 0000 0000 0000 *imm16*
+
+> *I* ← *imm16*
+
+#### `ldi rD imm`
+    if I set then
+      rD ← I:imm
+    else
+      rD ← 0:imm
+
+#### `se[bh] rD`
+    sign extend byte (b) or halfword (h) of rD
+
+#### `ld[bhw] rA imm rD`
+    rD ← (rA + imm)
+
+#### `st[bhw] rA rD imm`
+    (rD + imm) ← rA
+
+### System Calls
+
+#### system
+
+`sys` *vector12* *imm16*
+
+0000 *vector12* *imm16*
+
+> (*SP*) ← *r1*
+>
+> (*SP* - 4) ← *r2*
+>
+> . . .
+>
+> (*SP* - 52) ← *r14*
+>
+> (*SP* - 56) ← *PC*
+>
+> *SP* ← *SP* - 56
+>
+> *r1* ← *vector12* (zero extended to 32-bit)
+>
+> *r2* ← *imm16* (sign extended to 32-bit)
+
+#### break
+
+`brk`
+
+same as "`sys` 0 0"

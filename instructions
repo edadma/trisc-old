@@ -1,0 +1,70 @@
+triple
+
+RRR-type:  ooo xxx yyy ffff zzz
+
+- 00000 add
+- 00001 sub
+- 00010 mul
+- 00011 muls
+- 00100 div
+- 00101 and
+- 00110 or
+- 00111 xor
+- 01000 adc
+- 01001 sbb
+- 10101 asr
+- 10110 lsr
+- 10111 shl
+
+RRI-type:  ooo xxx yyy ff iiiii
+
+st[bhw]
+
+ld[bhw]
+
+addi/subi/muli/divi
+
+asri/lsri/shli/cmpi
+
+RR-typ:  ooo xxx yyy 11 00 sss  (ooo same as for st[bhw])
+mov (s = 0)
+cmp (s = 1)
+tst (s = 2)
+
+I-type: ooo f iiiiiiiiii
+
+lui/jsr
+
+B-type:  ooo cccc dddddddd
+
+- 0000 HS/CC  C = 0           carry clear
+- 0001 LO/CS  C = 1           carry set
+- 0010 EQ/ZE  Z = 1           equal/zero
+- 0011 GE     N ⊕ V = 0       greater than or equal
+- 0100 GT     Z + (N ⊕ V) = 0 greater than
+- 0101 HI     C + Z = 0       higher
+- 0110 LE     Z + (N ⊕ V) = 1 less than or equal
+- 0111 LS     C + Z = 1       lower or same
+- 1000 LT     N ⊕ V = 1       less than
+- 1001 MI     N = 1           minus
+- 1010 NE/NZ  Z = 0           not equal/not zero
+- 1011 PL     N = 0           plus
+- 1100 R      TRUE            always
+- 1101 N      FALSE           never
+- 1110 VS     V = 1           overflow set
+- 1111 VC     V = 0           overflow clear
+
+R-type:  ooo xxx --- ffff ---
+
+- 0000 seb   sign-extend byte
+- 0001 seh
+- 0010 zeb   zero-extend byte
+- 0011 zeh
+- 0100 jmp
+- 0101 jsr
+- 0110 pshb
+- 0111 popb
+- 1000 pshh
+- 1001 poph
+- 1010 pshw
+- 1011 popw
